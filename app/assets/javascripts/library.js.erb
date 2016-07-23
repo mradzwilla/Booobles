@@ -1,14 +1,14 @@
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update});
 
 function preload(){
-  game.load.spritesheet('redBubble', 'assets/redBubble.png')
-  game.load.spritesheet('yellowBubble', 'assets/yellowBubble.png')
-  game.load.spritesheet('blueBubble', 'assets/blueBubble.png')
-  game.load.spritesheet('greenBubble', 'assets/greenBubble.png')
-  game.load.spritesheet('purpleBubble', 'assets/purpleBubble.png')
-  game.load.spritesheet('orangeBubble', 'assets/orangeBubble.png')
-  game.load.spritesheet('tealBubble', 'assets/tealBubble.png')
-  game.load.image('menuScreen', 'assets/mainMenu.png')
+  game.load.spritesheet('redBubble', "<%= asset_path('redBubble.png') %>")
+  game.load.spritesheet('yellowBubble', "<%= asset_path('yellowBubble.png') %>")
+  game.load.spritesheet('blueBubble', "<%= asset_path('blueBubble.png') %>")
+  game.load.spritesheet('greenBubble', "<%= asset_path('greenBubble.png') %>")
+  game.load.spritesheet('purpleBubble', "<%= asset_path('purpleBubble.png') %>")
+  game.load.spritesheet('orangeBubble', "<%= asset_path('orangeBubble.png') %>")
+  game.load.spritesheet('tealBubble', "<%= asset_path('tealBubble.png') %>")
+  game.load.image('menuScreen', "<%= asset_path('mainMenu.png') %>")
 
   game.stage.backgroundColor = '#C8FDF8' 
   game.state.add("mainMenu", mainMenu)
