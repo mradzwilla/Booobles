@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.2.6'
 # Use sqlite3 as the database for Active Record
 # gem 'sqlite3'
+gem 'pg'
 gem 'phaser-rails'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
