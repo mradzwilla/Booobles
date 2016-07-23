@@ -8,18 +8,26 @@ function preload(){
   game.load.spritesheet('purpleBubble', 'assets/purpleBubble.png')
   game.load.spritesheet('orangeBubble', 'assets/orangeBubble.png')
   game.load.spritesheet('tealBubble', 'assets/tealBubble.png')
-
+  game.load.image('menuScreen', 'assets/mainMenu.png')
 
   game.stage.backgroundColor = '#C8FDF8' 
-  game.state.add(mainMenu, "mainMenu")
-  game.state.add(replayMenu, "replayMenu")
-  game.state.start(mainMenu, "mainMenu")
+  game.state.add("mainMenu", mainMenu)
+  game.state.add("myGame", myGame)
+  game.state.add("replayMenu", replayMenu)
+  // game.state.start(mainMenu, "mainMenu")
 }
 
 function create(){
-   game.stage.backgroundColor = '#C8FDF8' 
+  game.state.start('mainMenu')
+}
+
+var myGame = {
+
+  create: function(){
+    game.stage.backgroundColor = '#C8FDF8' 
     circleCount = 1
     score = 0
+    score = 1240
     level = 1
     timeLeft = 5
     bubbles = game.add.group();
@@ -73,7 +81,8 @@ function create(){
     	// console.log(timeLeft)
       updateTimeDisplay();
     	if (timeLeft == 0){
-    		game.time.events.stop();
+    		timer.destroy();
+        game.state.start('mainMenu')
     	}
     }
 
@@ -99,6 +108,7 @@ function create(){
       scoreDisplay.destroy()
       scoreDisplay = game.add.text(15, 130, 'Score: ' + score)
     }
+
    	function drawCircles(circleCount){
 
    		for (i=0; i < circleCount; i++){
@@ -106,7 +116,6 @@ function create(){
 
       var bubbleIdx = game.rnd.integerInRange(0, bubbleArray.length-1)
 
-      console.log(bubbleArray)
       var newBubble = bubbleArray[game.rnd.integerInRange(0, bubbleIdx)]
 
       var childImage = bubbles.create( game.rnd.integerInRange(50, 750),  game.rnd.integerInRange(50, 550), newBubble.sprite);
@@ -140,11 +149,10 @@ function create(){
       if (e.colorCode == pickThisColor){
         e.destroy()
         bubbles.remove(e)
-        timeLeft = 10
+        // timeLeft = 10
         updateTimeDisplay();
         updateScore();
         updateColor();
-        console.log(bubbleArray)
 
         if (score == 1240){
           bubbleArray = [
@@ -180,17 +188,26 @@ function create(){
               bubbleArray.push(orangeBubble)
               bubbleArray.push(tealBubble)
             }
+
             drawCircles(circleCount)
-          }
+        }
       } else {
         console.log("Wow you sux")
       }
   	}
 }
+}
 
 var mainMenu = {
   create: function(){
-    var image = game.add.sprite(0,0,'redBubble')
+    var image = game.add.sprite(0,0,'menuScreen')
+
+    game.input.onDown.add(startNewGame, this);
+
+    function startNewGame(){
+      game.state.start('myGame');
+    }
+
   }
 }
 
