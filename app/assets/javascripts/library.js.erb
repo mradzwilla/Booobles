@@ -149,7 +149,6 @@ var myGame = {
       if (e.colorCode == pickThisColor){
         e.destroy()
         bubbles.remove(e)
-        // timeLeft = 10
         updateTimeDisplay();
         updateScore();
         updateColor();
@@ -192,7 +191,8 @@ var myGame = {
             drawCircles(circleCount)
         }
       } else {
-        console.log("Wow you sux")
+        timer.destroy();
+        game.state.start('mainMenu');
       }
   	}
 }
@@ -201,6 +201,10 @@ var myGame = {
 var mainMenu = {
   create: function(){
     var image = game.add.sprite(0,0,'menuScreen')
+    
+    if (typeof score !== 'undefined'){
+    game.add.text(245, 360, 'Your score was '+ score)
+    }
 
     game.input.onDown.add(startNewGame, this);
 
