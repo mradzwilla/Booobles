@@ -9,6 +9,7 @@ function preload(){
   game.load.spritesheet('orangeBubble', "<%= asset_path('orangeBubble.png') %>")
   game.load.spritesheet('tealBubble', "<%= asset_path('tealBubble.png') %>")
   game.load.image('menuScreen', "<%= asset_path('mainMenu.png') %>")
+  game.load.image('startButton', "<%= asset_path('startButton.png') %>")
 
   game.stage.backgroundColor = '#C8FDF8' 
   game.state.add("mainMenu", mainMenu)
@@ -211,14 +212,20 @@ var myGame = {
 var mainMenu = {
   create: function(){
     var image = game.add.sprite(0,0,'menuScreen')
-    
+    var start = game.add.button(250,280,'startButton', startNewGame)
+
     if (typeof score !== 'undefined'){
       //Test for score to se if they were redirected to the menu
-      game.add.text(245, 360, 'Your score was '+ score)
-      game.add.text(245,400, this.lostBecause)
+      var scoreBubble = game.add.sprite(560,300, 'yellowBubble')
+      var lostBubble = game.add.sprite(20,300, 'tealBubble')
+      lostBubble.scale.setTo(.8)
+      scoreBubble.scale.setTo(.8)
+      var scoreText = game.add.text(620, 360, 'Score:\n    '+ score, { fontSize: '32px', fill: '#c227af' })
+      var lostText = game.add.text(70,330, this.lostBecause, {fill: '#c227af', wordWrap: true, wordWrapWidth: 130})
+
     }
 
-    game.input.onDown.add(startNewGame, this);
+    // game.input.onDown.add(startNewGame, this);
 
     function startNewGame(){
       game.state.start('myGame');
