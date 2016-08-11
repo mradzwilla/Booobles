@@ -84,13 +84,9 @@ var myGame = {
     function updateTimeValue(){
         if (level == 1){
           timeLeft = 10
-        }
-
-        if (level == 2){
+        } else if (level == 2){
           timeLeft = 8
-        }
-
-        if (level == 3){
+        } else if (level == 3){
           timeLeft = 8
         }
     }
@@ -186,30 +182,26 @@ var myGame = {
         //If screen is cleared
         if (level == 1){
 
-          if (circleCount == 5){
+          if (circleCount == 8){
             bubbleArray.push(purpleBubble)
             bubbleArray.push(greenBubble)
             level = 2
             circleCount = 0
-            //Set to 0 because one will be added at end of function
+            //Set to 0 because 1 will be added at end of function
           }
-          timeLeft = 10
         }
 
         if (level == 2){
-            if (circleCount == 10){
+            if (circleCount == 8){
               bubbleArray.push(orangeBubble)
               bubbleArray.push(tealBubble)
               level = 3
               circleCount = 0
             }
-
-          timeLeft = 7
         }
 
-        if (level == 3){
-          timeLeft = 4
-        }
+        // if (level == 3){
+        // }
           circleCount += 1
           drawCircles(circleCount)
     }
