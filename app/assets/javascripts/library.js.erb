@@ -26,9 +26,8 @@ var myGame = {
     game.stage.backgroundColor = '#C8FDF8' 
     circleCount = 1
     score = 0
-    // score = 1240
     level = 1
-    timeLeft = 5
+    timeLeft = 10
     bubbles = game.add.group();
     currentColor = ''
     pickThisColor = ''
@@ -56,7 +55,7 @@ var myGame = {
       sprite: 'tealBubble',
       colorCode: '21d4c1'
     }
-    existingBubbles = []
+    // existingBubbles = []
     //bubbleArray contains existing bubbles. Each object contains a sprite and the corresponding color
     //New objects can later be added to the array to increase difficulty
     
@@ -74,13 +73,26 @@ var myGame = {
 
     function countdown(){
     	timeLeft -= 1
-    	// console.log(timeLeft)
       updateTimeDisplay();
     	if (timeLeft == 0){
     		timer.destroy();
         game.state.states['mainMenu'].lostBecause = "You ran out of time!"
         game.state.start('mainMenu')
     	}
+    }
+
+    function updateTimeValue(){
+        if (level == 1){
+          timeLeft = 10
+        }
+
+        if (level == 2){
+          timeLeft = 8
+        }
+
+        if (level == 3){
+          timeLeft = 8
+        }
     }
 
     function updateTimeDisplay(){
@@ -93,7 +105,6 @@ var myGame = {
       if (bubbles.length >= 1){
         // var bubbleIdx = game.rnd.integerInRange(0, bubbles.length-1)
         var bubbleIdx = Math.floor(Math.random()*bubbles.length)
-        // console.log("update Color" + bubbleIdx)
         var randBubble = bubbles.children[bubbleIdx]
         pickThisColor = randBubble.colorCode
         currentColorDisplay.beginFill("0x"+ randBubble.colorCode);
@@ -101,7 +112,7 @@ var myGame = {
      }
     }
 
-    function updateScore(){
+    function updateScoreDisplay(){
       scoreDisplay.destroy()
       scoreDisplay = game.add.text(15, 130, 'Score: ' + score)
     }
@@ -111,9 +122,9 @@ var myGame = {
    		for (i=0; i < circleCount; i++){
 
 
-      var bubbleIdx = game.rnd.integerInRange(0, bubbleArray.length-1)
+      // var bubbleIdx = game.rnd.integerInRange(0, bubbleArray.length-1)
 
-      var newBubble = bubbleArray[game.rnd.integerInRange(0, bubbleIdx)]
+      var newBubble = bubbleArray[game.rnd.integerInRange(0, bubbleArray.length-1)]
 
       var newSprite = bubbles.create( game.rnd.integerInRange(50, 750),  game.rnd.integerInRange(50, 550), newBubble.sprite);
         newSprite.colorCode = newBubble.colorCode
@@ -122,7 +133,7 @@ var myGame = {
         newSprite.inputEnabled = true;
         newSprite.input.useHandCursor = true;
         newSprite.events.onInputDown.add(resetTimer, this);
-        existingBubbles.push(newSprite)
+        // existingBubbles.push(newSprite)
 
         if (i == 0){
           currentColorDisplay.beginFill("0x"+newBubble.colorCode);
@@ -141,59 +152,68 @@ var myGame = {
     timer.start();
 
     function resetTimer(e){
-      // console.log(bubbles.children)
       
       if (e.colorCode == pickThisColor){
+        //If bubble clicked matches the selected color
+        updateScoreValue();
+        updateScoreDisplay();
+
         e.destroy()
         bubbles.remove(e)
+
+        updateTimeValue();
         updateTimeDisplay();
-        updateScore();
         updateColor();
 
-        if (score == 1240){
-          bubbleArray = [
-            { sprite: 'redBubble',
-              colorCode: 'ff0000'
-            },
-            { sprite: 'yellowBubble',
-              colorCode: 'ebf30a'
-            },
-            { sprite: 'blueBubble',
-              colorCode: '186fe5'
-            }
-          ]
-        }
+        //If screen is clear, update level information
+        if (bubbles.length == 0) {
+           levelManager();
+        };
 
-        if (score >= 840){
-          timeLeft = 5
-        } else {
-          timeLeft = 10
-          score += circleCount * 2
-
-        }
-
-        if (bubbles.length == 0){
-            circleCount += 1
-
-            if (circleCount == 3){
-              bubbleArray.push(purpleBubble)
-              bubbleArray.push(greenBubble)
-            }
-
-            if (circleCount == 11){
-              bubbleArray.push(orangeBubble)
-              bubbleArray.push(tealBubble)
-            }
-
-            drawCircles(circleCount)
-        }
       } else {
         timer.destroy();
         game.state.states['mainMenu'].lostBecause = "You picked the wrong color!"
         game.state.start('mainMenu');
       }
   	}
-}
+
+    function updateScoreValue(){
+      //This probably doesn't need to be it's own function
+      score += (bubbles.length * level)
+    }
+
+    function levelManager(){
+        //If screen is cleared
+        if (level == 1){
+
+          if (circleCount == 5){
+            bubbleArray.push(purpleBubble)
+            bubbleArray.push(greenBubble)
+            level = 2
+            circleCount = 0
+            //Set to 0 because one will be added at end of function
+          }
+          timeLeft = 10
+        }
+
+        if (level == 2){
+            if (circleCount == 10){
+              bubbleArray.push(orangeBubble)
+              bubbleArray.push(tealBubble)
+              level = 3
+              circleCount = 0
+            }
+
+          timeLeft = 7
+        }
+
+        if (level == 3){
+          timeLeft = 4
+        }
+          circleCount += 1
+          drawCircles(circleCount)
+    }
+  }
 }
 
 var mainMenu = {
